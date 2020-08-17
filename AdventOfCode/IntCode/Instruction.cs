@@ -5,20 +5,21 @@ using AdventOfCode.IntCode.Interfaces;
 
 namespace AdventOfCode.IntCode
 {
-    public class Instruction : IInstruction
+    public class Instruction
     {
         public Instruction(int instruction)
         {
-            var inputChars = instruction.ToString().Reverse().ToArray();
-            var instructionChars = Enumerable.Range(0, 5).Select(s => '0').ToArray();
-            for (var i = 0; i < inputChars.Length; i++) instructionChars[i] = inputChars[i];
+            var instructionString = instruction.ToString();
+            instructionString = instructionString.PadLeft(5, '0');
+            var instructionArray = instructionString.ToArray();
 
-            var opChar = instructionChars.Take(2).Reverse().ToArray();
+            var opCodeChar = instructionArray.TakeLast(2).ToArray();
+            Op = GetOpCode(opCodeChar);
 
-            Op = GetOpCode(opChar);
-            
-            var modes = instructionChars.Skip(2).ToArray();
-            ParameterModes = GetModes(modes);
+            var numberOfParams = GetNumberOfParams(Op);
+            var instructionParams = instructionArray.SkipLast(2).Reverse().Select(s => int.Parse(s.ToString())).ToArray();
+
+            ParameterModes = GetParameterModes(instructionParams, numberOfParams);
         }
 
         public OpCode Op { get; }
@@ -30,10 +31,44 @@ namespace AdventOfCode.IntCode
             return (OpCode) opCodeInt;
         }
 
-        private static IList<Mode> GetModes(IEnumerable<char> modes)
+        private static int GetNumberOfParams(OpCode opCode)
         {
-            var intModes = modes.Select(m => (Mode) int.Parse(m.ToString())).ToArray();
-            return intModes;
+            return opCode switch
+            {
+                OpCode.Add => 3,
+                OpCode.Multiply => 3,
+                OpCode.Save => 1,
+                OpCode.Output => 1,
+                OpCode.Halt => 0,
+                _ => throw new Exception("Unknown OpCode param length")
+            };
         }
+
+        private static IList<Mode> GetParameterModes(IReadOnlyList<int> paramsAsInt, int numberOfParams)
+        {
+            var paramModes = new Mode[numberOfParams];
+            for (var i = 0; i < Math.Min(paramsAsInt.Count, numberOfParams); i++)
+            {
+                paramModes[i] = paramsAsInt[i] switch
+                {
+                    0 => Mode.Position,
+                    1 => Mode.Immediate,
+                    _ => throw new Exception("Unknown Mode")
+                };
+            }
+
+            if (paramModes.Any())
+            {
+                paramModes[numberOfParams - 1] = Mode.Position;
+            }
+            
+            return paramModes;
+        }
+
+        // private static IList<Mode> GetModes(IEnumerable<char> modes)
+        // {
+        //     var intModes = modes.Select(m => (Mode) int.Parse(m.ToString())).ToArray();
+        //     return intModes;
+        // }
     }
 }

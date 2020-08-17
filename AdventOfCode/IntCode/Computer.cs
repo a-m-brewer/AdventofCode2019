@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using AdventOfCode.IntCode.Factories;
 using AdventOfCode.IntCode.Interfaces;
 
 namespace AdventOfCode.IntCode
@@ -9,22 +8,16 @@ namespace AdventOfCode.IntCode
     {
         private readonly IInputModule _inputModule;
         private readonly IOutputModule _outputModule;
-        private readonly IInstructionFactory _instructionFactory;
         private IList<int> _memory;
         private int _instructionPointer;
 
-        public Computer(IInputModule inputModule, IOutputModule outputModule, IInstructionFactory instructionFactory)
+        public Computer(IInputModule inputModule, IOutputModule outputModule)
         {
             _inputModule = inputModule;
             _outputModule = outputModule;
-            _instructionFactory = instructionFactory;
             Reset();
         }
 
-        public Computer(IInputModule inputModule, IOutputModule outputModule) : this(inputModule, outputModule, new Day5InstructionFactory())
-        {
-        }
-        
         public void Load(IList<int> memory)
         {
             _memory = memory;
@@ -45,57 +38,67 @@ namespace AdventOfCode.IntCode
             
             while (_instructionPointer < _memory.Count && _memory[_instructionPointer] != (int) OpCode.Halt)
             {
-                var instruction = _instructionFactory.Parse(_memory[_instructionPointer]);
-
+                var instruction = new Instruction(_memory[_instructionPointer]);
                 var parameterValues = GetParameterValues(instruction);
 
+                int index;
                 switch (instruction.Op)
                 {
                     case OpCode.Add:
-                        _memory[parameterValues[2]] = parameterValues[0] + parameterValues[1];
-                        _instructionPointer += 4;
+                        index = parameterValues[2].value;
+                        _memory[index] = GetValue(parameterValues[0]) + GetValue(parameterValues[1]);
                         break;
                     case OpCode.Multiply:
-                        _memory[parameterValues[2]] = parameterValues[0] * parameterValues[1];
-                        _instructionPointer += 4;
+                        index = parameterValues[2].value;
+                        _memory[index] = GetValue(parameterValues[0]) * GetValue(parameterValues[1]);
                         break;
                     case OpCode.Save:
-                        _memory[parameterValues[0]] = _inputModule.InputCallback();
-                        _instructionPointer += 2;
+                        index = parameterValues[0].value;
+                        _memory[index] = _inputModule.InputCallback();
                         break;
                     case OpCode.Output:
-                        _outputModule.OutputCallback(_memory[parameterValues[0]]);
-                        _instructionPointer += 2;
+                        var outputValue = GetValue(parameterValues[0]);
+                        _outputModule.OutputCallback(outputValue);
                         break;
                     case OpCode.Halt:
                         return _memory;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(instruction.Op));
+                        throw new ArgumentOutOfRangeException();
                 }
+                
+                _instructionPointer += instruction.ParameterModes.Count + 1;
             }
 
             return _memory;
         }
 
-        private IList<int> GetParameterValues(IInstruction instruction)
+        private IList<(int value, Mode mode)> GetParameterValues(Instruction instruction)
         {
-            var values = new int[instruction.ParameterModes.Count];
-            var parameterStart = _instructionPointer + 1;
-            var parameterEnd = parameterStart + instruction.ParameterModes.Count;
-            for (var i = parameterStart; i < parameterEnd; i++)
+            var firstIndex = _instructionPointer + 1;
+            var endIndex = firstIndex + instruction.ParameterModes.Count;
+            
+            var parameterValues = new List<(int value, Mode mode)>(instruction.ParameterModes.Count);
+
+            for (var i = firstIndex; i < endIndex; i++)
             {
+                var param = _memory[i];
                 var modeIndex = i - _instructionPointer - 1;
                 var mode = instruction.ParameterModes[modeIndex];
-
-                values[modeIndex] = mode switch
-                {
-                    Mode.Position => i,
-                    Mode.Immediate => _memory[i],
-                    _ => throw new Exception("Unknown mode")
-                };
+                parameterValues.Add((param, mode));
             }
 
-            return values;
+            return parameterValues;
+        }
+
+        private int GetValue((int value, Mode mode) parameter)
+        {
+            var (val, mode) = parameter;
+            return mode switch
+            {
+                Mode.Position => _memory[val],
+                Mode.Immediate => val,
+                _ => throw new Exception("Unknown mode in GetValue")
+            };
         }
     }
 }

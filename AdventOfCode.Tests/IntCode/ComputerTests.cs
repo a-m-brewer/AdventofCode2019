@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using AdventOfCode.IntCode;
-using AdventOfCode.IntCode.Factories;
 using AdventOfCode.IntCode.Interfaces;
 using FluentAssertions;
 using Moq;
@@ -19,7 +19,7 @@ namespace AdventOfCode.Tests.IntCode
         {
             _inputModule = new Mock<IInputModule>();
             _outputModule = new Mock<IOutputModule>();
-            _sut = Create(new Day2InstructionFactory());
+            _sut = Create();
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace AdventOfCode.Tests.IntCode
         {
             var input = new[] {1002, 4, 3, 4, 33};
             var output = new[] {1002, 4, 3, 4, 99};
-            _sut = Create(new Day5InstructionFactory());
+            _sut = Create();
             _sut.Load(input);
             _sut.Run().Should().Equal(output);
         }
@@ -98,16 +98,17 @@ namespace AdventOfCode.Tests.IntCode
             _inputModule.Setup(s => s.InputCallback()).Returns(1);
             _outputModule.Setup(s => s.OutputCallback(It.IsAny<int>())).Callback<int>(i => output.Add(i));
             
-            _sut = Create(new Day5InstructionFactory());
+            _sut = Create();
             
             var memory = AirConDiagnostic.Memory;
             _sut.Load(memory);
             _sut.Run();
+            output.Last().Should().Be(15259545);
         }
 
-        private Computer Create(IInstructionFactory instructionFactory)
+        private Computer Create()
         {
-            return new Computer(_inputModule.Object, _outputModule.Object, instructionFactory);
+            return new Computer(_inputModule.Object, _outputModule.Object);
         }
     }
 }
