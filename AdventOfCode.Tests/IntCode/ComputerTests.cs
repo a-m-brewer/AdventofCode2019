@@ -182,6 +182,17 @@ namespace AdventOfCode.Tests.IntCode
             _output.Last().Should().Be(999);
         }
 
+        [Test]
+        public void Day5Part2Exercise()
+        {
+            _inputModule.Setup(s => s.InputCallback()).Returns(5);
+            _sut = Create();
+            var memory = AirConDiagnostic.Memory;
+            _sut.Load(memory);
+            _sut.Run();
+            _output.Last().Should().Be(7616021);
+        }
+
         private Computer Create()
         {
             return new Computer(_inputModule.Object, _outputModule.Object);

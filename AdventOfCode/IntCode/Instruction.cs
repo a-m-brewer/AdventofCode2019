@@ -48,7 +48,7 @@ namespace AdventOfCode.IntCode
             };
         }
 
-        private static IList<Mode> GetParameterModes(IReadOnlyList<int> paramsAsInt, int numberOfParams)
+        private IList<Mode> GetParameterModes(IReadOnlyList<int> paramsAsInt, int numberOfParams)
         {
             var paramModes = new Mode[numberOfParams];
             for (var i = 0; i < Math.Min(paramsAsInt.Count, numberOfParams); i++)
@@ -61,12 +61,32 @@ namespace AdventOfCode.IntCode
                 };
             }
 
-            if (paramModes.Any())
+            if (IsWriteMemoryInstruction() && paramModes.Any())
             {
                 paramModes[numberOfParams - 1] = Mode.Position;
             }
             
             return paramModes;
+        }
+
+        private bool IsWriteMemoryInstruction()
+        {
+            switch (Op)
+            {
+                case OpCode.Add:
+                case OpCode.Multiply:
+                case OpCode.LessThan:
+                case OpCode.Eql:
+                case OpCode.Save:
+                    return true;
+                case OpCode.JmpT:
+                case OpCode.JmpF:
+                case OpCode.Output:
+                case OpCode.Halt:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

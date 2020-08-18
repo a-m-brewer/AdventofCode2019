@@ -55,7 +55,8 @@ namespace AdventOfCode.IntCode
                         break;
                     case OpCode.Save:
                         index = parameterValues[0].value;
-                        _memory[index] = _inputModule.InputCallback();
+                        var input = _inputModule.InputCallback();
+                        _memory[index] = input;
                         break;
                     case OpCode.Output:
                         var outputValue = GetValue(parameterValues[0]);
@@ -63,11 +64,11 @@ namespace AdventOfCode.IntCode
                         break;
                     case OpCode.JmpT:
                         jmp = GetValue(parameterValues[0]) > 0;
-                        if (jmp) _instructionPointer = parameterValues[1].value;
+                        if (jmp) _instructionPointer = GetValue(parameterValues[1]);
                         break;
                     case OpCode.JmpF:
                         jmp = GetValue(parameterValues[0]) == 0;
-                        if (jmp) _instructionPointer = parameterValues[1].value;
+                        if (jmp) _instructionPointer = GetValue(parameterValues[1]);
                         break;
                     case OpCode.LessThan:
                         var lt = GetValue(parameterValues[0]) < GetValue(parameterValues[1]);

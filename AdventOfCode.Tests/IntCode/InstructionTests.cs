@@ -52,7 +52,6 @@ namespace AdventOfCode.Tests.IntCode
         [TestCase(11101, 2)]
         [TestCase(11102, 2)]
         [TestCase(11103, 0)]
-        [TestCase(11104, 0)]
         public void WriteToParamIsNeverInImmediateMode(int instruction, int outputPos)
         {
             new Instruction(instruction).ParameterModes[outputPos].Should().Be(Mode.Position);
