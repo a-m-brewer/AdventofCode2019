@@ -13,12 +13,18 @@ namespace AdventOfCode.Tests.IntCode
         private Computer _sut;
         private Mock<IInputModule> _inputModule;
         private Mock<IOutputModule> _outputModule;
+        private List<int> _output;
 
         [SetUp]
         public void Setup()
         {
             _inputModule = new Mock<IInputModule>();
             _outputModule = new Mock<IOutputModule>();
+            
+            _output = new List<int>();
+            _inputModule.Setup(s => s.InputCallback()).Returns(1);
+            _outputModule.Setup(s => s.OutputCallback(It.IsAny<int>())).Callback<int>(i => _output.Add(i));
+            
             _sut = Create();
         }
 
@@ -94,16 +100,86 @@ namespace AdventOfCode.Tests.IntCode
         [Test]
         public void Day5Exercise1()
         {
-            var output = new List<int>();
-            _inputModule.Setup(s => s.InputCallback()).Returns(1);
-            _outputModule.Setup(s => s.OutputCallback(It.IsAny<int>())).Callback<int>(i => output.Add(i));
-            
             _sut = Create();
-            
             var memory = AirConDiagnostic.Memory;
             _sut.Load(memory);
             _sut.Run();
-            output.Last().Should().Be(15259545);
+            _output.Last().Should().Be(15259545);
+        }
+
+        [Test]
+        public void Day5Part2Example1()
+        {
+            _sut = Create();
+            var memory = new List<int> {3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8};
+            _sut.Load(memory);
+            _sut.Run();
+            _output.Last().Should().Be(0);
+        }
+        
+        [Test]
+        public void Day5Part2Example2()
+        {
+            _sut = Create();
+            var memory = new List<int> {3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8};
+            _sut.Load(memory);
+            _sut.Run();
+            _output.Last().Should().Be(1);
+        }
+                
+        [Test]
+        public void Day5Part2Example3()
+        {
+            _sut = Create();
+            var memory = new List<int> {3, 3, 1108, -1, 8, 3, 4, 3, 99};
+            _sut.Load(memory);
+            _sut.Run();
+            _output.Last().Should().Be(0);
+        } 
+        
+        [Test]
+        public void Day5Part2Example4()
+        {
+            _sut = Create();
+            var memory = new List<int> {3, 3, 1107, -1, 8, 3, 4, 3, 99};
+            _sut.Load(memory);
+            _sut.Run();
+            _output.Last().Should().Be(1);
+        }
+        
+        [Test]
+        public void Day5Part2Example5()
+        {
+            _sut = Create();
+            var memory = new List<int> {3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9};
+            _sut.Load(memory);
+            _sut.Run();
+            _output.Last().Should().Be(1);
+        }
+        
+        [Test]
+        public void Day5Part2Example6()
+        {
+            _sut = Create();
+            var memory = new List<int> {3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1};
+            _sut.Load(memory);
+            _sut.Run();
+            _output.Last().Should().Be(1);
+        }
+        
+        [Test]
+        public void Day5Part2Example7()
+        {
+            _sut = Create();
+            var memory = new List<int>
+            {
+                3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31,
+                1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104,
+                999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99
+            };
+            _sut.Load(memory);
+            _sut.Run();
+            _output.Last().Should().Be(999);
         }
 
         private Computer Create()

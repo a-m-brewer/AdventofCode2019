@@ -42,6 +42,7 @@ namespace AdventOfCode.IntCode
                 var parameterValues = GetParameterValues(instruction);
 
                 int index;
+                var jmp = false;
                 switch (instruction.Op)
                 {
                     case OpCode.Add:
@@ -60,13 +61,32 @@ namespace AdventOfCode.IntCode
                         var outputValue = GetValue(parameterValues[0]);
                         _outputModule.OutputCallback(outputValue);
                         break;
+                    case OpCode.JmpT:
+                        jmp = GetValue(parameterValues[0]) > 0;
+                        if (jmp) _instructionPointer = parameterValues[1].value;
+                        break;
+                    case OpCode.JmpF:
+                        jmp = GetValue(parameterValues[0]) == 0;
+                        if (jmp) _instructionPointer = parameterValues[1].value;
+                        break;
+                    case OpCode.LessThan:
+                        var lt = GetValue(parameterValues[0]) < GetValue(parameterValues[1]);
+                        index = parameterValues[2].value;
+                        _memory[index] = lt ? 1 : 0;;
+                        break;
+                    case OpCode.Eql:
+                        var eql = GetValue(parameterValues[0]) == GetValue(parameterValues[1]);
+                        index = parameterValues[2].value;
+                        var toStore = eql ? 1 : 0;
+                        _memory[index] = toStore;
+                        break;
                     case OpCode.Halt:
                         return _memory;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
                 
-                _instructionPointer += instruction.ParameterModes.Count + 1;
+                if (!jmp) _instructionPointer += instruction.ParameterModes.Count + 1;
             }
 
             return _memory;

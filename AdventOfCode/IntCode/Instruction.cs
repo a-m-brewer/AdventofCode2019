@@ -40,6 +40,10 @@ namespace AdventOfCode.IntCode
                 OpCode.Save => 1,
                 OpCode.Output => 1,
                 OpCode.Halt => 0,
+                OpCode.JmpT => 2,
+                OpCode.JmpF => 2,
+                OpCode.LessThan => 3,
+                OpCode.Eql => 3,
                 _ => throw new Exception("Unknown OpCode param length")
             };
         }
@@ -64,11 +68,5 @@ namespace AdventOfCode.IntCode
             
             return paramModes;
         }
-
-        // private static IList<Mode> GetModes(IEnumerable<char> modes)
-        // {
-        //     var intModes = modes.Select(m => (Mode) int.Parse(m.ToString())).ToArray();
-        //     return intModes;
-        // }
     }
 }
