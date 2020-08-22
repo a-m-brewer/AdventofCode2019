@@ -16,7 +16,7 @@ namespace AdventOfCode.Tests.Orbits
         public void SetUp()
         {
             _filePath = "day6.txt";
-            _sut = new DirectAndInDirectOrbitCalculator(new OrbitMapper(new PlanetSearcher()));
+            _sut = new DirectAndInDirectOrbitCalculator();
         }
 
         [Test]
@@ -43,7 +43,44 @@ namespace AdventOfCode.Tests.Orbits
         public void Part1Challenge()
         {
             var data = new FileRelationshipInputData(_filePath);
-            _sut.Calculate(data).Should().Be(42);
+            _sut.Calculate(data).Should().Be(162439);
+        }
+
+        [Test]
+        public void Part2Exercise()
+        {
+            var data = new FileRelationshipInputData(_filePath);
+            var sut = new DistanceToSantaCalculator();
+
+            var result = sut.Calculate(data);
+
+            result.Should().Be(367);
+        }
+        
+        [Test]
+        public void Part2Example()
+        {
+            var data = new RelationshipInputData(new List<string>
+            {
+                "COM)B",
+                "B)C",
+                "C)D",
+                "D)E",
+                "E)F",
+                "B)G",
+                "G)H",
+                "D)I",
+                "E)J",
+                "J)K",
+                "K)L",
+                "K)YOU",
+                "I)SAN"
+            });
+            var sut = new DistanceToSantaCalculator();
+
+            var result = sut.Calculate(data);
+
+            result.Should().Be(4);
         }
     }
 }

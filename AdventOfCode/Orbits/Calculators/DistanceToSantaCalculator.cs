@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using System.Linq;
 using AdventOfCode.Orbits.Interfaces;
 using AdventOfCode.Orbits.Models;
 
 namespace AdventOfCode.Orbits.Calculators
 {
-    public class DirectAndInDirectOrbitCalculator
+    public class DistanceToSantaCalculator
     {
         public int Calculate(IRelationshipInputData data)
         {
@@ -18,9 +17,9 @@ namespace AdventOfCode.Orbits.Calculators
             
             var tree = new Tree<string>(root, relationships);
 
-            var count = tree.CountNodes();
+            var distance = tree.DistanceBetweenNodes("YOU", "SAN");
 
-            return count;
+            return distance;
         }
     }
 }
