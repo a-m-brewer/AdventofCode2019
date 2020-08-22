@@ -6,15 +6,20 @@ namespace AdventOfCode.IntCode
 {
     public class Computer
     {
-        private readonly IInputModule _inputModule;
-        private readonly IOutputModule _outputModule;
+        public IInputModule InputModule { get; set; }
+        public IOutputModule OutputModule { get; set; }
         private IList<int> _memory;
         private int _instructionPointer;
 
         public Computer(IInputModule inputModule, IOutputModule outputModule)
         {
-            _inputModule = inputModule;
-            _outputModule = outputModule;
+            InputModule = inputModule;
+            OutputModule = outputModule;
+            Reset();
+        }
+
+        public Computer()
+        {
             Reset();
         }
 
@@ -55,12 +60,12 @@ namespace AdventOfCode.IntCode
                         break;
                     case OpCode.Save:
                         index = parameterValues[0].value;
-                        var input = _inputModule.InputCallback();
+                        var input = InputModule.InputCallback();
                         _memory[index] = input;
                         break;
                     case OpCode.Output:
                         var outputValue = GetValue(parameterValues[0]);
-                        _outputModule.OutputCallback(outputValue);
+                        OutputModule.OutputCallback(outputValue);
                         break;
                     case OpCode.JmpT:
                         jmp = GetValue(parameterValues[0]) > 0;
