@@ -6,7 +6,7 @@ namespace AdventOfCode.Orbits.Models
     public class Tree<T>
     {
         private readonly List<Relationship<T>> _relationships;
-        private List<TreeNode<T>> _nodes = new List<TreeNode<T>>();
+        private readonly List<TreeNode<T>> _nodes = new List<TreeNode<T>>();
         
         public Tree(TreeNode<T> root, List<Relationship<T>> relationships)
         {
