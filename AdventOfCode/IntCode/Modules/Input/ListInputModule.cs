@@ -19,6 +19,11 @@ namespace AdventOfCode.IntCode.Modules.Input
             _index = 0;
         }
 
+        public void Append(int input)
+        {
+            _inputs.Add(input);
+        }
+
         public int InputCallback()
         {
             var input = _inputs[_index];

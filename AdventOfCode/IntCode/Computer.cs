@@ -11,6 +11,9 @@ namespace AdventOfCode.IntCode
         private IList<int> _memory;
         private int _instructionPointer;
 
+        public bool Running { get; set; }
+        public bool Halted { get; private set; }
+
         public Computer(IInputModule inputModule, IOutputModule outputModule)
         {
             InputModule = inputModule;
@@ -40,8 +43,10 @@ namespace AdventOfCode.IntCode
             {
                 throw new Exception($"You must load a program first using {nameof(Computer)}.{nameof(Load)}");
             }
+
+            Running = true;
             
-            while (_instructionPointer < _memory.Count && _memory[_instructionPointer] != (int) OpCode.Halt)
+            while (Running && _instructionPointer < _memory.Count)
             {
                 var instruction = new Instruction(_memory[_instructionPointer]);
                 var parameterValues = GetParameterValues(instruction);
@@ -87,6 +92,7 @@ namespace AdventOfCode.IntCode
                         _memory[index] = toStore;
                         break;
                     case OpCode.Halt:
+                        Halted = true;
                         return _memory;
                     default:
                         throw new ArgumentOutOfRangeException();

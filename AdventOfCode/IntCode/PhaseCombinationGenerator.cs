@@ -6,13 +6,14 @@ namespace AdventOfCode.IntCode
 {
     public class PhaseCombinationGenerator
     {
-        public IEnumerable<IEnumerable<int>> GenerateCombinations(int length)
+        public IEnumerable<IEnumerable<int>> GenerateCombinations(int length, int offset = 0)
         {
             var l = int.Parse(new string('4', length));
             var max = FromBase(l, 5) + 1;
             var res = Enumerable.Range(0, max)
                 .Select(ToBase5)
                 .Where(w => w.Distinct().Count() == w.Count)
+                .Select(s => s.Select(d => d + offset))
                 .ToList();
             return res;
         }

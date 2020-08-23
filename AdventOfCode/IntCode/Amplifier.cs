@@ -8,30 +8,51 @@ namespace AdventOfCode.IntCode
     public class Amplifier
     {
         private readonly Computer _comp;
-        private readonly ListOutputModule _out;
         private readonly int[] _program;
+        private AmplifierInputModule _ampModule;
+        private List<int> _output;
+
+        public bool Halted => _comp.Halted;
 
         public Amplifier(ICollection<int> program)
         {
             _program = new int[program.Count];
             program.CopyTo(_program, 0);
-            _comp = new Computer();
-            _out = new ListOutputModule();
-            _comp.OutputModule = _out;
+            _comp = new Computer {OutputModule = new ActionOutputModule(OutputCallback)};
+            ReloadProgram();
+            Reset();
         }
 
         public int Run(int phaseMode, int input)
         {
-            Reset();
-            _comp.InputModule = new AmplifierInputModule(phaseMode, input);
-            _comp.Load(_program);
+            if (_ampModule == null)
+            {
+                _ampModule =  new AmplifierInputModule(phaseMode, input);
+            }
+            else
+            {
+                _ampModule.Append(input);
+            }
+
+            _comp.InputModule = _ampModule;
             _comp.Run();
-            return _out.Output.LastOrDefault();
+            return _output.LastOrDefault();
         }
 
-        private void Reset()
+        public void ReloadProgram()
         {
-            _out.Output = new List<int>();
+            _comp.Load(_program);
+        }
+
+        public void Reset()
+        {
+            _output = new List<int>();
+        }
+
+        private void OutputCallback(int val)
+        {
+            _comp.Running = false;
+            _output.Add(val);
         }
     }
 }
