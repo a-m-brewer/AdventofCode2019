@@ -10,7 +10,10 @@ namespace AdventOfCode.IntCode
         {
             var l = int.Parse(new string('4', length));
             var max = FromBase(l, 5) + 1;
-            var res = Enumerable.Range(0, max).Select(ToBase5).ToList();
+            var res = Enumerable.Range(0, max)
+                .Select(ToBase5)
+                .Where(w => w.Distinct().Count() == w.Count)
+                .ToList();
             return res;
         }
 

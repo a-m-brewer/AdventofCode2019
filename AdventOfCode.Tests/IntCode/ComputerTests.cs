@@ -227,6 +227,10 @@ namespace AdventOfCode.Tests.IntCode
         public void Day7Part1Exercise()
         {
             var combinations = new PhaseCombinationGenerator().GenerateCombinations( 5).ToList();
+            var memory = ThrusterAmplification.Memory;
+            var ampPipeline = new AmplifierPipeline(memory);
+            var result = combinations.AsParallel().Max(m => ampPipeline.Run(m));
+            result.Should().Be(34686);
         }
 
         private Computer Create()
