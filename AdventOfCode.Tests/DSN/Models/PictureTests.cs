@@ -49,6 +49,32 @@ namespace AdventOfCode.Tests.DSN.Models
             var res = sut.Check(picture);
             res.Should().Be(1088);
         }
+
+        [Test]
+        public void Day8Part2Example1()
+        {
+            var raw = new RawPicture(2, 2, "0222112222120000");
+            var picture = new Picture(raw);
+            var decoded = picture.Decode();
+            decoded.Should().BeEquivalentTo(new FakeLayer
+            {
+                Rows = new List<IList<int>>
+                {
+                    new List<int> {0,1},
+                    new List<int> {1,0}
+                }
+            });
+        }
+
+        [Test]
+        public void Day8Part2Exercise()
+        {
+            var raw = new RawPicture(25, 6, RawData.Day8);
+            var picture = new Picture(raw);
+            var result = picture.Decode();
+            var stringResult = picture.ToString();
+            // hard to test but string result should equal LGYHB
+        }
     }
     
     public class FakePicture : IPicture
