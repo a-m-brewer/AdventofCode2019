@@ -10,6 +10,8 @@ namespace AdventOfCode.IntCode
         JmpF = 6,
         LessThan = 7,
         Eql = 8,
+        // adjust relative base offset
+        SetRbo = 9,
         Halt = 99
     }
 }

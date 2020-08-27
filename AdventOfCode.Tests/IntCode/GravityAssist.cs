@@ -2,7 +2,7 @@ namespace AdventOfCode.Tests.IntCode
 {
     public static class GravityAssist
     {
-        public static int[] Memory => new[]
+        public static long[] Memory => new long[]
         {
             1, 0, 0, 3, 1, 1, 2, 3, 1, 3, 4, 3, 1, 5, 0, 3, 2, 1, 10, 19, 1, 6, 19, 23, 2, 23, 6, 27, 2, 6, 27, 31, 2,
             13, 31, 35, 1, 10, 35, 39, 2, 39, 13, 43, 1, 43, 13, 47, 1, 6, 47, 51, 1, 10, 51, 55, 2, 55, 6, 59, 1, 5,

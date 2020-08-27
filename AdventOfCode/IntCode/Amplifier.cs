@@ -8,22 +8,22 @@ namespace AdventOfCode.IntCode
     public class Amplifier
     {
         private readonly Computer _comp;
-        private readonly int[] _program;
+        private readonly long[] _program;
         private AmplifierInputModule _ampModule;
-        private List<int> _output;
+        private List<long> _output;
 
         public bool Halted => _comp.Halted;
 
-        public Amplifier(ICollection<int> program)
+        public Amplifier(ICollection<long> program)
         {
-            _program = new int[program.Count];
+            _program = new long[program.Count];
             program.CopyTo(_program, 0);
             _comp = new Computer {OutputModule = new ActionOutputModule(OutputCallback)};
             ReloadProgram();
             Reset();
         }
 
-        public int Run(int phaseMode, int input)
+        public long Run(long phaseMode, long input)
         {
             if (_ampModule == null)
             {
@@ -46,10 +46,10 @@ namespace AdventOfCode.IntCode
 
         public void Reset()
         {
-            _output = new List<int>();
+            _output = new List<long>();
         }
 
-        private void OutputCallback(int val)
+        private void OutputCallback(long val)
         {
             _comp.Running = false;
             _output.Add(val);

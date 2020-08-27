@@ -5,10 +5,10 @@ namespace AdventOfCode.IntCode
 {
     public class AmplifierPipeline
     {
-        private readonly IList<int> _program;
+        private readonly IList<long> _program;
         private List<Amplifier> _amps;
 
-        public AmplifierPipeline(IList<int> program, int numberOfAmps)
+        public AmplifierPipeline(IList<long> program, int numberOfAmps)
         {
             _program = program;
             Init(numberOfAmps);
@@ -24,9 +24,9 @@ namespace AdventOfCode.IntCode
             Init(_amps.Count);
         }
         
-        public int Run(IList<int> phaseSequence, bool feedbackMode = false)
+        public long Run(IList<long> phaseSequence, bool feedbackMode = false)
         {
-            var input = 0;
+            var input = 0L;
 
             if (feedbackMode)
             {

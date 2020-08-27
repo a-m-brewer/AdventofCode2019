@@ -7,7 +7,7 @@ namespace AdventOfCode.IntCode
 {
     public class Instruction
     {
-        public Instruction(int instruction)
+        public Instruction(long instruction)
         {
             var instructionString = instruction.ToString();
             instructionString = instructionString.PadLeft(5, '0');
@@ -27,7 +27,7 @@ namespace AdventOfCode.IntCode
 
         private static OpCode GetOpCode(char[] opCode)
         {
-            var opCodeInt = int.Parse(opCode);
+            var opCodeInt = long.Parse(opCode);
             return (OpCode) opCodeInt;
         }
 
@@ -44,6 +44,7 @@ namespace AdventOfCode.IntCode
                 OpCode.JmpF => 2,
                 OpCode.LessThan => 3,
                 OpCode.Eql => 3,
+                OpCode.SetRbo => 1,
                 _ => throw new Exception("Unknown OpCode param length")
             };
         }
@@ -57,15 +58,21 @@ namespace AdventOfCode.IntCode
                 {
                     0 => Mode.Position,
                     1 => Mode.Immediate,
+                    2 => Mode.Relative,
                     _ => throw new Exception("Unknown Mode")
                 };
             }
 
-            if (IsWriteMemoryInstruction() && paramModes.Any())
+
+            if (paramModes.Any())
             {
-                paramModes[numberOfParams - 1] = Mode.Position;
+                var outputInstructionMode = paramModes[numberOfParams - 1];
+                if (IsWriteMemoryInstruction() && outputInstructionMode == Mode.Immediate)
+                {
+                    paramModes[numberOfParams - 1] = Mode.Position;
+                }   
             }
-            
+
             return paramModes;
         }
 
@@ -83,6 +90,7 @@ namespace AdventOfCode.IntCode
                 case OpCode.JmpF:
                 case OpCode.Output:
                 case OpCode.Halt:
+                case OpCode.SetRbo:    
                     return false;
                 default:
                     throw new ArgumentOutOfRangeException();

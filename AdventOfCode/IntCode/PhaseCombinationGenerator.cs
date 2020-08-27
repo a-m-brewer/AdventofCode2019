@@ -6,7 +6,7 @@ namespace AdventOfCode.IntCode
 {
     public class PhaseCombinationGenerator
     {
-        public IEnumerable<IEnumerable<int>> GenerateCombinations(int length, int offset = 0)
+        public IEnumerable<IEnumerable<long>> GenerateCombinations(int length, int offset = 0)
         {
             var l = int.Parse(new string('4', length));
             var max = FromBase(l, 5) + 1;
@@ -18,9 +18,9 @@ namespace AdventOfCode.IntCode
             return res;
         }
 
-        private List<int> ToBase5(int quotient)
+        private List<long> ToBase5(int quotient)
         {
-            var result = new List<int>();
+            var result = new List<long>();
 
             while (quotient != 0)
             {
@@ -29,7 +29,7 @@ namespace AdventOfCode.IntCode
             }
 
             var padAmount = 5 - result.Count;
-            result.AddRange(new int[padAmount]);
+            result.AddRange(new long[padAmount]);
             
             return result;
         }

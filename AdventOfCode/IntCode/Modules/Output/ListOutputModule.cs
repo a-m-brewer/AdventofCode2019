@@ -5,9 +5,9 @@ namespace AdventOfCode.IntCode.Modules.Output
 {
     public class ListOutputModule : IOutputModule
     {
-        public List<int> Output { get; set; } = new List<int>();
+        public List<long> Output { get; set; } = new List<long>();
         
-        public void OutputCallback(int val)
+        public void OutputCallback(long val)
         {
             Output.Add(val);
         }

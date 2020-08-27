@@ -5,10 +5,10 @@ namespace AdventOfCode.IntCode.Modules.Input
 {
     public class ListInputModule : IInputModule
     {
-        private readonly List<int> _inputs;
+        private readonly List<long> _inputs;
         private int _index;
 
-        public ListInputModule(List<int> inputs)
+        public ListInputModule(List<long> inputs)
         {
             _inputs = inputs;
             Reset();
@@ -19,12 +19,12 @@ namespace AdventOfCode.IntCode.Modules.Input
             _index = 0;
         }
 
-        public void Append(int input)
+        public void Append(long input)
         {
             _inputs.Add(input);
         }
 
-        public int InputCallback()
+        public long InputCallback()
         {
             var input = _inputs[_index];
             _index++;
