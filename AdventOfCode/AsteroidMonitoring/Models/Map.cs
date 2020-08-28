@@ -42,10 +42,7 @@ namespace AdventOfCode.AsteroidMonitoring.Models
                         continue;
                     }
 
-                    var dx = Asteroids[a].Position.X - Asteroids[b].Position.X;
-                    var dy = Asteroids[a].Position.Y - Asteroids[b].Position.Y;
-                    
-                    var angle = (float)Math.Atan2(dx, dy);
+                    var angle = GetAsteroidDelta(Asteroids[a], Asteroids[b]);
                     if (!angles.Contains(angle))
                     {
                         angles.Add(angle);
@@ -61,6 +58,68 @@ namespace AdventOfCode.AsteroidMonitoring.Models
             }
             
             return (best, highest);
+        }
+
+        public Tile DestroyAsteroids(Tile currentBase, int amount)
+        {
+            var targets = new Dictionary<float, List<Tile>>();
+        
+            for (var c = 0; c < Asteroids.Count; c++)
+            {
+                if (currentBase == Asteroids[c])
+                {
+                    continue;
+                }
+
+                var angle = GetAsteroidDelta(currentBase, Asteroids[c]);
+                
+                if (!targets.ContainsKey(angle))
+                {
+                    targets[angle] = new List<Tile>();
+                }
+                
+                targets[angle].Add(Asteroids[c]);
+            }
+            
+            var keyOrder = targets.Keys.OrderBy(x => (180 - x) % 180).ToArray();
+            var keyIndex = 0;
+
+            Tile last = null;
+
+            foreach (var range in targets.Values)
+            {
+                range.Sort((x, y) => Distance(currentBase, x).CompareTo(Distance(currentBase, y)));
+            }
+            
+            for (; amount > 0; amount--)
+            {
+                List<Tile> firingLine;
+                do
+                {
+                    firingLine = targets[keyOrder[keyIndex]];
+                    keyIndex = (++keyIndex) % keyOrder.Length;
+
+                } while (firingLine.Count == 0);
+
+                last = firingLine[0];
+                firingLine.RemoveAt(0);
+            }
+
+            return last;
+        }
+
+        private float GetAsteroidDelta(Tile a, Tile b)
+        {
+            var dx = a.Position.X - b.Position.X;
+            var dy = a.Position.Y - b.Position.Y;
+                    
+            var angle = (float)Math.Atan2(dx, dy);
+            return angle;
+        }
+        
+        private static float Distance(Tile a, Tile b)
+        {
+            return (float)Math.Sqrt(Math.Pow(a.Position.X - b.Position.X, 2) + Math.Pow(a.Position.Y - b.Position.Y, 2));
         }
 
         private void InitTiles(IRawMap map)

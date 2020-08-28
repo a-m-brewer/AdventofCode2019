@@ -137,5 +137,20 @@ namespace AdventOfCode.Tests.AsteroidMonitoring
             asteroid.Position.Should().BeEquivalentTo(new Coordinates(26, 28));
             visible.Should().Be(267);
         }
+        
+        [Test]
+        public void Part2Exercise()
+        {
+            var raw = new FileRawMap("day10.txt");
+            var map = new Map(raw);
+
+            var (asteroid, _) = map.FindBestLocation();
+
+            var result = map.DestroyAsteroids(asteroid, 200);
+
+            var betCalculation = result.Position.X * 100 + result.Position.Y;
+
+            betCalculation.Should().Be(1309);
+        }
     }
 }
