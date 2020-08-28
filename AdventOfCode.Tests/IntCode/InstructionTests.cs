@@ -1,4 +1,5 @@
 using AdventOfCode.IntCode;
+using AdventOfCode.IntCode.Enums;
 using FluentAssertions;
 using NUnit.Framework;
 

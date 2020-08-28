@@ -1,6 +1,10 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AdventOfCode.IntCode;
+using AdventOfCode.IntCode.Hardware.Amp;
+using AdventOfCode.IntCode.Hardware.Robot;
+using AdventOfCode.IntCode.Hardware.Robot.Models;
 using AdventOfCode.IntCode.Interfaces;
 using AdventOfCode.IntCode.Modules.Input;
 using AdventOfCode.IntCode.Modules.Output;
@@ -432,6 +436,24 @@ namespace AdventOfCode.Tests.IntCode
             pc.Load(program);
             pc.Run();
             output.Last().Should().Be(51135);
+        }
+
+        [Test]
+        public void Day11Part1Exercise()
+        {
+            var robot = new HullPaintingRobot();
+            var visited = robot.Paint();
+            visited.Count.Should().Be(2255);
+        }
+        
+        [Test]
+        public void Day11Part2Exercise()
+        {
+            var robot = new HullPaintingRobot(1);
+            var visited = robot.Paint();
+
+            var numberPlate = new NumberPlate {Panels = visited};
+            // BCKFPCRA
         }
         
         private Computer Create()

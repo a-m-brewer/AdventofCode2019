@@ -1,4 +1,4 @@
-namespace AdventOfCode.IntCode
+namespace AdventOfCode.IntCode.Enums
 {
     public enum OpCode
     {

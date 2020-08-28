@@ -3,7 +3,7 @@ using System.Linq;
 using AdventOfCode.IntCode.Modules.Input;
 using AdventOfCode.IntCode.Modules.Output;
 
-namespace AdventOfCode.IntCode
+namespace AdventOfCode.IntCode.Hardware.Amp
 {
     public class Amplifier
     {

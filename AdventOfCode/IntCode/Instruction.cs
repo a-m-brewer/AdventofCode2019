@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdventOfCode.IntCode.Enums;
 using AdventOfCode.IntCode.Interfaces;
 
 namespace AdventOfCode.IntCode

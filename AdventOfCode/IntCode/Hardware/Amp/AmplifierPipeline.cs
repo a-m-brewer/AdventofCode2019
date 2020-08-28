@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.IntCode
+namespace AdventOfCode.IntCode.Hardware.Amp
 {
     public class AmplifierPipeline
     {
