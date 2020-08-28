@@ -1,4 +1,4 @@
-namespace AdventOfCode.Fuel
+namespace AdventOfCode.Fuel.Interfaces
 {
     public interface IFuelRequirementsCalculator
     {

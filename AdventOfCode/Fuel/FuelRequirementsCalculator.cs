@@ -1,4 +1,5 @@
 using System;
+using AdventOfCode.Fuel.Interfaces;
 
 namespace AdventOfCode.Fuel
 {
