@@ -145,7 +145,7 @@ namespace AdventOfCode.IntCode.Hardware.Arcade
         private Command _lastCommand;
         private Pixel _nextPixel;
         private long[] _currentMemory;
-        private List<long> _validJoystickActions;
+        private readonly List<long> _validJoystickActions;
         private long _ballPos;
         private long _paddlePos;
     }
