@@ -100,7 +100,7 @@ namespace AdventOfCode.IntCode.Hardware.Robot
             };
         }
 
-        private static long[] CreateProgram() => new[]
+        private static IEnumerable<long> CreateProgram() => new[]
         {
             3, 8, 1005, 8, 299, 1106, 0, 11, 0, 0, 0, 104, 1, 104, 0, 3, 8, 102, -1, 8, 10, 101, 1, 10, 10, 4, 10, 1008,
             8, 0, 10, 4, 10, 1002, 8, 1, 29, 1, 1007, 14, 10, 2, 1106, 8, 10, 3, 8, 1002, 8, -1, 10, 1001, 10, 1, 10, 4,

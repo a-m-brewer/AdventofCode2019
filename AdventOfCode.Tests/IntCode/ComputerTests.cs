@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using AdventOfCode.IntCode;
 using AdventOfCode.IntCode.Hardware.Amp;
+using AdventOfCode.IntCode.Hardware.Arcade;
 using AdventOfCode.IntCode.Hardware.Robot;
 using AdventOfCode.IntCode.Hardware.Robot.Models;
 using AdventOfCode.IntCode.Interfaces;
-using AdventOfCode.IntCode.Modules.Input;
 using AdventOfCode.IntCode.Modules.Output;
 using FluentAssertions;
 using Moq;
@@ -454,6 +453,26 @@ namespace AdventOfCode.Tests.IntCode
 
             var numberPlate = new NumberPlate {Panels = visited};
             // BCKFPCRA
+        }
+
+        [Test]
+        public void Day13Part1Exercise()
+        {
+            var arcade = new ArcadeMachine();
+            arcade.Load();
+            arcade.Play();
+            var blocks = arcade.Screen.Pixels.Count(c => c.Value == "#");
+            blocks.Should().Be(324);
+        }
+        
+        [Test]
+        public void Day13Part2Exercise()
+        {
+            var arcade = new ArcadeMachine();
+            arcade.Load();
+            arcade.InsertCash();
+            arcade.Play();
+            arcade.Score.Should().Be(15957);
         }
         
         private Computer Create()
