@@ -115,6 +115,11 @@ namespace AdventOfCode.IntCode
             return _memory;
         }
 
+        public void Stop()
+        {
+            Running = false;
+        }
+
         private IList<(long value, Mode mode)> GetParameterValues(Instruction instruction)
         {
             var firstIndex = _instructionPointer + 1;

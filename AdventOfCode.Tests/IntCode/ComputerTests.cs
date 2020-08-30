@@ -4,6 +4,7 @@ using AdventOfCode.IntCode;
 using AdventOfCode.IntCode.Hardware.Amp;
 using AdventOfCode.IntCode.Hardware.Arcade;
 using AdventOfCode.IntCode.Hardware.Robot;
+using AdventOfCode.IntCode.Hardware.Robot.Algorithms;
 using AdventOfCode.IntCode.Hardware.Robot.Models;
 using AdventOfCode.IntCode.Interfaces;
 using AdventOfCode.IntCode.Modules.Output;
@@ -473,6 +474,26 @@ namespace AdventOfCode.Tests.IntCode
             arcade.InsertCash();
             arcade.Play();
             arcade.Score.Should().Be(15957);
+        }
+
+        [Test]
+        public void Day15Part1()
+        {
+            var repair = new OxygenRepairDroid(UserMode.LeastExplored);
+            var result = repair.Repair();
+            var pathfinder = new AStarPathfinder();
+            var path = pathfinder.FindPath(result);
+            var numberOfCommands = path.Count + 1;
+            numberOfCommands.Should().Be(238);
+        }
+
+        [Test]
+        public void Day15Part2()
+        {
+            var repair = new OxygenRepairDroid(UserMode.LeastExplored);
+            var nodes = repair.Repair();
+            var result = nodes.TimeTillOxygenRegenerated();
+            
         }
         
         private Computer Create()

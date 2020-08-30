@@ -1,5 +1,7 @@
 ﻿using System;
-using AdventOfCode.IntCode.Hardware.Arcade;
+using AdventOfCode.IntCode.Hardware.Robot;
+using AdventOfCode.IntCode.Hardware.Robot.Algorithms;
+using AdventOfCode.IntCode.Hardware.Robot.Models;
 
 namespace AdventOfCode
 {
@@ -7,12 +9,12 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            var arcade = new ArcadeMachine(false, true, 100);
-            arcade.Load();
-            arcade.InsertCash();
-            arcade.Play();
-            Console.WriteLine($"Score: {arcade.Score}");
-            Console.WriteLine($"Inputs: {string.Join(", ", arcade.Inputs)}");
+            var repair = new OxygenRepairDroid(UserMode.LeastExplored,true);
+            var result = repair.Repair();
+            Console.WriteLine($"x: {result.End.X}, y: {result.End.Y}");
+            var pathfinder = new AStarPathfinder();
+            var path = pathfinder.FindPath(result);
+            var numberOfCommands = path.Count + 1;
         }
     }
 }

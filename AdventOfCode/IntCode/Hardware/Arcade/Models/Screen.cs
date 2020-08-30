@@ -29,14 +29,17 @@ namespace AdventOfCode.IntCode.Hardware.Arcade.Models
 
         public override string ToString()
         {
-            var width = Pixels.Max(m => m.X);
-            var height = Pixels.Max(m => m.Y);
+            var minX = Pixels.Min(m => m.X);
+            var minY = Pixels.Min(m => m.Y);
+            
+            var width = Pixels.Max(m => m.X) + (Pixels.Any() ? 1 : 0) - minX;
+            var height = Pixels.Max(m => m.Y) + (Pixels.Any() ? 1 : 0) - minY;
 
             var output = "";
 
-            foreach (var y in Enumerable.Range(0, (int)height))
+            foreach (var y in Enumerable.Range((int)minY, (int)height))
             {
-                foreach (var x in Enumerable.Range(0, (int)width))
+                foreach (var x in Enumerable.Range((int)minX, (int)width))
                 {
                     var p = Pixels.FirstOrDefault(f => f.X == x && f.Y == y)?.Value ?? " ";
                     output += p;
