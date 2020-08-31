@@ -11,11 +11,14 @@ namespace AdventOfCode.IntCode.Hardware.Robot.Models
 
         public OxygenRepairDroidResult(Dictionary<string, (int visited, OxygenNode node)> seen, long endX, long endY)
         {
+            Seen = seen;
             Nodes = seen.Values.Select(s => s.node).ToList();
             End = (endX, endY);
 
             _screen = null;
         }
+
+        public Dictionary<string, (int visited, OxygenNode node)> Seen { get; }
 
         private bool _showScreen;
         public bool ShowScreen

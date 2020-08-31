@@ -492,12 +492,19 @@ namespace AdventOfCode.Tests.IntCode
         {
             var repair = new OxygenRepairDroid(UserMode.LeastExplored);
             var result = repair.Repair();
+            
+            /*
+             * I Don't know if this is a hack or if it always solves the problem in all cases
+             *
+             * The general strat is run the least explored algorithm once. and then run it again with the seen tiles
+             * from the last run. As the algorithm prioritises the least visited tiles (including unvisited). This generally
+             * finds the rest of the unvisited tiles that are missing.
+             */
+            repair = new OxygenRepairDroid(UserMode.LeastExplored, result.Seen);
+            result = repair.Repair();
 
             var timeTillOxygen = result.TimeTillOxygenRegenerated();
-
-            // TODO: could not figure out how to make the droid always explore the whole map
-            // How would it know it had explored the whole map
-            // timeTillOxygen.Should().Be(392);
+            timeTillOxygen.Should().Be(392);
         }
         
         private Computer Create()

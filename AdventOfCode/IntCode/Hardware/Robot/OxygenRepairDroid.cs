@@ -22,7 +22,7 @@ namespace AdventOfCode.IntCode.Hardware.Robot
         private Dictionary<string, (int visited, OxygenNode node)> _seen;
         private List<int> _dirs;
 
-        public OxygenRepairDroid(UserMode userMode, bool showScreen = false)
+        public OxygenRepairDroid(UserMode userMode, Dictionary<string, (int visited, OxygenNode node)> seen = null, bool showScreen = false)
         {
             _x = 0;
             _y = 0;
@@ -44,12 +44,18 @@ namespace AdventOfCode.IntCode.Hardware.Robot
             
             UpdateDroidPos();
             
-            _seen = new Dictionary<string, (int visited, OxygenNode node)>
+            _seen = seen?.ToDictionary(k => k.Key, v => v.Value) ?? new Dictionary<string, (int visited, OxygenNode node)>
             {
                 {
                     CurrentPosKey(), (1, new OxygenNode(_x, _y, "D"))
                 }
             };
+            
+            foreach (var (_, p) in _seen.Values)
+            {
+                _screen.Update(p);
+            }
+            
             _dirs = new List<int>{1,2,3,4};
         }
 
