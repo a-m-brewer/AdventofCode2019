@@ -491,9 +491,11 @@ namespace AdventOfCode.Tests.IntCode
         public void Day15Part2()
         {
             var repair = new OxygenRepairDroid(UserMode.LeastExplored);
-            var nodes = repair.Repair();
-            var result = nodes.TimeTillOxygenRegenerated();
-            
+            var result = repair.Repair();
+
+            var timeTillOxygen = result.TimeTillOxygenRegenerated();
+
+            timeTillOxygen.Should().Be(392);
         }
         
         private Computer Create()

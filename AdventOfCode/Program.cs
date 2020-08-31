@@ -9,12 +9,15 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            var repair = new OxygenRepairDroid(UserMode.LeastExplored,true);
+            var repair = new OxygenRepairDroid(UserMode.LeastExplored,false);
             var result = repair.Repair();
+            result.ShowScreen = true;
             Console.WriteLine($"x: {result.End.X}, y: {result.End.Y}");
-            var pathfinder = new AStarPathfinder();
-            var path = pathfinder.FindPath(result);
-            var numberOfCommands = path.Count + 1;
+            // var pathfinder = new AStarPathfinder();
+            // var path = pathfinder.FindPath(result);
+            // var numberOfCommands = path.Count + 1;
+
+            Console.WriteLine($"Oxygen Regeneration Time: {result.TimeTillOxygenRegenerated()}");
         }
     }
 }

@@ -8,12 +8,12 @@ namespace AdventOfCode.IntCode.Hardware.Arcade.Models
     {
         public Screen()
         {
-            Pixels = new List<Pixel>();
+            Pixels = new List<IPixel>();
         }
 
-        public IList<Pixel> Pixels { get; }
+        public IList<IPixel> Pixels { get; }
 
-        public void Update(Pixel p)
+        public void Update(IPixel p)
         {
             var pixelExists = Pixels.FirstOrDefault(f => f.X == p.X && f.Y == p.Y);
             if (pixelExists == null)

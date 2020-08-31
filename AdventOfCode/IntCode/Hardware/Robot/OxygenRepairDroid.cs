@@ -47,7 +47,7 @@ namespace AdventOfCode.IntCode.Hardware.Robot
             _seen = new Dictionary<string, (int visited, OxygenNode node)>
             {
                 {
-                    CurrentPosKey(), (1, new OxygenNode(_x, _y, true))
+                    CurrentPosKey(), (1, new OxygenNode(_x, _y, "D"))
                 }
             };
             _dirs = new List<int>{1,2,3,4};
@@ -138,7 +138,7 @@ namespace AdventOfCode.IntCode.Hardware.Robot
             }
 
             var key = GetPosKey(nextX, nextY);
-            var value = _seen.TryGetValue(key, out var v) ? v : (visited: 0, node: new OxygenNode(nextX, nextY, val != 0));
+            var value = _seen.TryGetValue(key, out var v) ? v : (visited: 0, node: new OxygenNode(nextX, nextY, GetValue(val)));
             value.visited++;
             _seen[key] = value;
         }
@@ -169,6 +169,17 @@ namespace AdventOfCode.IntCode.Hardware.Robot
 
         private string CurrentPosKey() => GetPosKey(_x, _y);
         private static string GetPosKey(long x, long y) => $"{x},{y}";
+
+        private static string GetValue(long pos)
+        {
+            return pos switch
+            {
+                0 => "#",
+                1 => ".",
+                2 => "O",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
 
         private static long[] CreateProgram() => new long[]
         {
